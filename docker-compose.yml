@@ -2,29 +2,6 @@ version: '3'
 
 services:
 
-    apache:
-        build: ./services/apache
-        image: "docker.io/constructions-incongrues/net-ouiedire-gatsby"
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.php.entrypoints=web"
-            - "traefik.http.routers.php.rule=Host(`net-ouiedire-gatsby.localhost`)"
-
-    adminer:
-        image: adminer:latest
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.adminer.entrypoints=web"
-            - "traefik.http.routers.adminer.rule=Host(`adminer.net-ouiedire-gatsby.localhost`)"
-
-    db:
-        image: mariadb:latest
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: net-ouiedire-gatsby
-        volumes:
-            - ./db/init.sql:/docker-entrypoint-initdb.d/00_init.sql
-
     portainer:
         image: portainer/portainer:1.24.1-alpine
         labels:
@@ -49,3 +26,5 @@ services:
             - "80:80"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+
+            

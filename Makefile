@@ -39,7 +39,6 @@ urls: # Affichage de la liste des URL publiques
 	@echo
 	@echo "  Outils"
 	@echo
-	@echo "    \033[36mAdminer\033[0m : http://adminer.net-ouiedire-gatsby.localhost"
 	@echo "    \033[36mPortainer\033[0m : http://portainer.net-ouiedire-gatsby.localhost"
 	@echo "    \033[36mTraefik\033[0m : http://traefik.net-ouiedire-gatsby.localhost"
 	@echo
