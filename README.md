@@ -1,137 +1,48 @@
+# net.ouiedire.gatsby
 
+## Présentation
 
-# Docker-compose
+Basée sur [GatsbyJS](https://www.gatsbyjs.com), cette application est destinée à la génération du site https://www.ouiedire.net à partir des données exposées par le projet [net.ouiedire.data](https://github.com/constructions-incongrues/net.ouiedire.data).
 
-## On crée un fichier  'Dockerfile' dans lequel on va définir l'environnement d'execution, par exemple pdo, php...
+## Développement
 
-```
-FROM php:apache
-RUN docker-php-ext-install pdo pdo_mysql
-COPY ./src /var/www/html/
-```
+### Pré-requis
 
-## Et un fichier 'docker-compose.yml' dans lequel on determine les différents services et on les configure  
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Git](https://git-scm.com/)
+- [Make](https://www.gnu.org/software/make/)
+- [Traefik](https://github.com/constructions-incongrues/net.constructions-incongrues.traefik)
 
-```
-version: '3'
-services:
+### Composants
 
-    mysql:
-        image: mysql:5.7.31 
-        environment: 
-            MYSQL_ROOT_PASSWORD: aav
-            MYSQL_DATABASE: net-ouiedire-gatsby
-        volumes: 
-            - ./src/bdd.sql:/docker-entrypoint-initdb.d/bdd.sql    
+#### Application
 
-    adminer:
-        image: adminer:latest  
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.adminer.entrypoints=web"
-            - "traefik.http.routers.adminer.rule=Host(`adminer.net-ouiedire-gatsby.localhost`)"  
-        
-    php:
-        build: .
-        image: kobische/skel
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.php.entrypoints=web"
-            - "traefik.http.routers.php.rule=Host(`php.net-ouiedire-gatsby.localhost`)"
+- [`gatsby`](https://www.gatsbyjs.com) : Générateur de site basé sur React
 
-```            
+### Interface en ligne de commande
 
+L'application expose un jeu d'outils destiné au contrôle et au développement d
 
-# Portainer : making container management easier
+La liste des commandes et leur documentation peut être obtenue en exécutant la commande suivante :
 
-## Installation : https://www.portainer.io/installation/
-
-```
-$ docker volume create portainer_data
-$ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
-
+```sh
+make help
 ```
 
+### Cookbooks
 
-# Makefile
-## Création d'un fichier Makefile dans lequel on va définir des commandes qu'on utilise souvent par exemple : 
+#### Démarrer l'application et des outils de développement
 
+**NB : L'application  [net.ouiedire.data](https://github.com/constructions-incongrues/net.ouiedire.data) doit être préalablement démarrée.**
+
+```sh
+make dev
 ```
-start: ## demarrer
-	docker-compose up --build -d
-```
 
-- On peut lui demander d'executer toujours une commande avant un autre : 
-```
-clean: stop ## supprimer
-	docker-compose rm -f
-```
-Ici avant de supprimer un container il va d'abord l'arrêter    
+L'exécution de cette commande affiche la liste des URL accessibles.
 
+### Contribuer au projet
 
-- On peut aussi executer plusieurs commandes :
-```
-portainer-open: portainer ## ouvrir portainer dans le navigateur	
-	sleep 3 
-	browse http://localhost:9000/#/home
-```
-ici portainer va s'ouvrir dans le browser et marquer un temps de 3 sec
+Se référer au [guide de contribution](/CONTRIBUTING.md).
 
-
-# Installation de Traefik : Traefik is an open-source Edge Router  : https://docs.traefik.io/
-
-## Dans le fichier : docker-compose.yml
-on ajoute : 
-
-```
-  traefik:
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-    image: traefik:v2.2.8
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-       - /var/run/docker.sock:/var/run/docker.sock:ro
-  ```
-
-On ajoute le label ici à php et adminer : 
-
-```
-  labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.adminer.entrypoints=web"
-      - "traefik.http.routers.adminer.rule=Host(`php.lenomduprojet.localhost`)"
-```      
-
-
-
-# Création d'un template à partir de skel : https://cookiecutter.readthedocs.io/en/1.7.2/installation.html 
-
-## Création d'un fichier 
-```
-net.constructions-incongrues.net-ouiedire-gatsby 
-```
-Mettre tout le projet dedans 
-
-
-## Création d'un fichier 
-```
-cookiecutter.json 
-
-{
-    "project_slug": "Hello"
-   
-}
-```
-## Création d'un dossier et Se placer dedans et créer le template: 
-
-```
-cookiecutter ../skel/
-```
-## Définir le nom du projet : 
-
-et c'est parti !!
