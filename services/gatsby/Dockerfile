@@ -13,8 +13,8 @@ RUN chown -R node:node /usr/src/app
 RUN yarn global add gatsby-cli
 
 # Définition des commandes par défaut
-ENTRYPOINT [ "gatsby" ]
-CMD [ "develop", "-H", "0.0.0.0"]
+ENTRYPOINT [ "/bin/sh", "-c" ]
+CMD [ "yarn install && gatsby develop -H 0.0.0.0"]
 
 # Définition de l'utilisateur par défaut
 USER node
@@ -24,5 +24,4 @@ COPY --chown=node:node ./src/yarn.lock ./yarn.lock
 RUN yarn install
 
 # Copie des sources du projet
-COPY --chown=node:node ./src /usr/local/app
-
+COPY --chown=node:node ./src /usr/src/app
