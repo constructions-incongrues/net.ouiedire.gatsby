@@ -20,8 +20,9 @@ CMD [ "develop", "-H", "0.0.0.0"]
 USER node
 
 # Installation des dépendances du projet
-COPY ./src/package.json ./package.json
+COPY --chown=node:node ./src/yarn.lock ./yarn.lock
 RUN yarn install
 
 # Copie des sources du projet
-COPY ./src .
+COPY --chown=node:node ./src /usr/local/app
+
