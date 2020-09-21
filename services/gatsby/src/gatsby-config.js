@@ -1,5 +1,6 @@
 module.exports = {
     plugins: [
+      `gatsby-plugin-less`,
       {
         // ...
         resolve: '@directus/gatsby-source-directus',
