@@ -1,4 +1,6 @@
 import React from "react"
+import {link} from "gatsby"
+
 // import { Link } from "gatsby"
 
 // Layout par défaut
